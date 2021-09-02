@@ -36,7 +36,21 @@ var userLogSchema = new Schema(
 
 
 app.get('/', (req, res) => {
-  res.send('hello world');
+  var datas = mongoose.model('userLog', userLogSchema, 'user_log');
+  var rowData = [];
+  datas.find(function(error, userLog) {
+    if(error) {
+      console.log("error : ", error)
+    } else {
+      userLog.forEach(function(row) {
+        rowData.push(row);
+        console.log("data : ", row)
+      })
+      console.log(rowData[0])
+      res.json(rowData[0]);
+    }
+  })
+  // res.json({name: 'naemanaem'});
 })
 
 app.get('/auth', (req, res) => {
