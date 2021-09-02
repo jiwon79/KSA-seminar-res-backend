@@ -20,6 +20,7 @@ var userLogSchema = new Schema(
     number: String
   }
 )
+
 // var userLogSchema = new Schema(
 //   {
 //     currentTime: String, 
@@ -36,6 +37,17 @@ var userLogSchema = new Schema(
 
 
 app.get('/', (req, res) => {
+  var UserLog = mongoose.model('UserLog', userLogSchema, 'user_log');
+  var userLogData = new UserLog({
+    name: '권순호',
+    time: '2021020',
+    number: '19-001'
+  });
+
+  userLogData.save().then(() => res.send('success'));
+})
+
+app.get('/userLog', (req, res) => {
   var datas = mongoose.model('userLog', userLogSchema, 'user_log');
   var rowData = [];
   datas.find(function(error, userLog) {
@@ -46,12 +58,12 @@ app.get('/', (req, res) => {
         rowData.push(row);
         console.log("data : ", row)
       })
-      console.log(rowData[0])
-      res.json(rowData[0]);
     }
+    res.json(rowData);
   })
   // res.json({name: 'naemanaem'});
 })
+
 
 app.get('/auth', (req, res) => {
   res.send(req.query.id+','+req.query.pw)
