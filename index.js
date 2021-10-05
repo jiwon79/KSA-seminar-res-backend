@@ -1,8 +1,10 @@
-const express = require('express') //express를 설치했기 때문에 가져올 수 있다.
+const express = require('express')
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+
 const app = express()
 const port = process.env.PORT || 3000;
 
-var mongoose = require('mongoose');
 mongoose.connect(process.env.KSA_SEMINAR_KIOSK_DB);
 var db = mongoose.connection;
 db.on('error', function(){
@@ -12,7 +14,6 @@ db.once('open', function() {
     console.log('Connected!');
 });
 
-var Schema = mongoose.Schema;
 var userLogSchema = new Schema(
   {
     name: String,
@@ -20,21 +21,6 @@ var userLogSchema = new Schema(
     number: String
   }
 )
-
-// var userLogSchema = new Schema(
-//   {
-//     currentTime: String, 
-//     stu_num: String, 
-//     stu_name: String, 
-//     phone_num: String,
-//     option: String,
-//     info: {
-//       seminar: String,
-//       time: String
-//     }
-//   }
-// )
-
 
 app.get('/', (req, res) => {
   var UserLog = mongoose.model('UserLog', userLogSchema, 'user_log');
@@ -63,6 +49,13 @@ app.get('/userLog', (req, res) => {
   })
   // res.json({name: 'naemanaem'});
 })
+
+// a,b,c,d,e 정보 주면 reserve_log table에 넣기
+// 오늘 날짜가 있으면 업데이ㅌ, 없으면 새로 생성
+
+
+
+
 
 
 app.get('/auth', (req, res) => {
