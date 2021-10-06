@@ -22,16 +22,26 @@ var userLogSchema = new Schema(
   }
 )
 
-app.get('/', (req, res) => {
-  var UserLog = mongoose.model('UserLog', userLogSchema, 'user_log');
-  var userLogData = new UserLog({
+app.get('/', async (req, res) => {
+  var userLog = mongoose.model('userlogs', userLogSchema);
+  var userLogData = new userLog({
     name: '권순호',
     time: '2021020',
     number: '19-001'
   });
 
-  userLogData.save().then(() => res.send('success'));
+  try {
+    let response = await userLogData.save();
+    res.send('SUCCESS');
+  } catch(e) {
+    console.log(e);
+    res.send('FAIL');
+  }
 })
+
+// app.get('/updateTodayData', (req, res)) => {
+  
+// }
 
 app.get('/userLog', (req, res) => {
   var datas = mongoose.model('userLog', userLogSchema, 'user_log');
