@@ -1,8 +1,12 @@
-const express = require('express')
+const express = require('express');
+const { createServer } = require('http');
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const app = express()
+const cors = require('cors');
+
+app.use(cors());
 const port = process.env.PORT || 3000;
 
 mongoose.connect(process.env.KSA_SEMINAR_KIOSK_DB);
@@ -39,9 +43,15 @@ app.get('/', async (req, res) => {
   }
 })
 
-// app.get('/updateTodayData', (req, res)) => {
+app.get('/updateTodayData', (req, res) => {
+  console.log(req.body);
+  // let number = req.body.number;
+  // let name = req.body.name;
   
-// }
+  // console.log(number, name);
+})
+
+
 
 app.get('/userLog', (req, res) => {
   var datas = mongoose.model('userLog', userLogSchema, 'user_log');
@@ -62,10 +72,6 @@ app.get('/userLog', (req, res) => {
 
 // a,b,c,d,e 정보 주면 reserve_log table에 넣기
 // 오늘 날짜가 있으면 업데이ㅌ, 없으면 새로 생성
-
-
-
-
 
 
 app.get('/auth', (req, res) => {
