@@ -36,10 +36,10 @@ app.get('/', async (req, res) => {
 
   try {
     let response = await userLogData.save();
-    res.send('SUCCESS');
+    res.send({'result': 'SUCCESS'});
   } catch(e) {
     console.log(e);
-    res.send('FAIL');
+    res.send({'result': 'FAIL'});
   }
 })
 
