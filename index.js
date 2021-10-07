@@ -34,7 +34,7 @@ const reserveLogSchema = new Schema({
     b: [String],
     c: [String],
     d: [String],
-    e: [String],
+    e: [String]
   },
   name: {
     a: [String],
@@ -46,7 +46,7 @@ const reserveLogSchema = new Schema({
 });
 
 app.get('/', async (req, res) => {
-  var userLog = mongoose.model('userlogs', userLogSchema);
+  var userLog = mongoose.model('user_logs', userLogSchema);
   var userLogData = new userLog({
     name: '권순호',
     time: '2021020',
@@ -62,15 +62,38 @@ app.get('/', async (req, res) => {
   }
 })
 
-app.post('/updateTodayData', (req, res) => {
-  console.log(req.body);
-  // const number = JSON.parse(req.body).number;
-  // const name = JSON.parse(req.body).name;
-  // console.log(number, name);
-  res.send({'result': 'SUCCESS'});
+app.post('/updateTodayData', async (req, res) => {
+  reserve_name = JSON.parse(req.body.name);
+  reserve_number = JSON.parse(req.body.number);
+  let date = new Date();
+
+  var reserveLog = mongoose.model('reserve_logs', reserveLogSchema);
+  var reserveLogData = new reserveLog({
+    date: date.toISOString().slice(0,10),
+    name: {
+      a: reserve_name.a,
+      b: reserve_name.b,
+      c: reserve_name.c,
+      d: reserve_name.d,
+      e: reserve_name.e
+    },
+    number: {
+      a: reserve_number.a,
+      b: reserve_number.b,
+      c: reserve_number.c,
+      d: reserve_number.d,
+      e: reserve_number.e
+    }
+  });
+
+  try {
+    await reserveLogData.save();
+    res.send({'result': 'SUCCESS'});
+  } catch(e) {
+    console.log(e);
+    res.send({'result': 'FAIL'});
+  }
 })
-
-
 
 app.get('/userLog', (req, res) => {
   var datas = mongoose.model('userLog', userLogSchema, 'user_log');
