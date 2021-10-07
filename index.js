@@ -65,11 +65,12 @@ app.get('/', async (req, res) => {
 app.post('/updateTodayData', async (req, res) => {
   reserve_name = JSON.parse(req.body.name);
   reserve_number = JSON.parse(req.body.number);
-  let date = new Date();
+  var date = new Date();
+  var todayDate = date.toISOString().slice(0,10);
 
   var reserveLog = mongoose.model('reserve_logs', reserveLogSchema);
   var reserveLogData = new reserveLog({
-    date: date.toISOString().slice(0,10),
+    date: todayDate,
     name: {
       a: reserve_name.a,
       b: reserve_name.b,
@@ -85,9 +86,19 @@ app.post('/updateTodayData', async (req, res) => {
       e: reserve_number.e
     }
   });
+  console.log(reserveLogData);
 
   try {
-    await reserveLogData.save();
+    var count = await reserveLog.count({ 'date': todayDate });
+    console.log(count);
+
+    if (count == 0) {
+      await reserveLogData.save();
+    } else {
+      const filter = { date: todayDate };
+      const update = { number: reserve_number, name: reserve_name };
+      reserveLog.findOneAndUpdate(filter, {$set: update}).exec();
+    }
     res.send({'result': 'SUCCESS'});
   } catch(e) {
     console.log(e);
