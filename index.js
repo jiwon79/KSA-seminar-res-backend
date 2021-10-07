@@ -21,14 +21,29 @@ db.once('open', function() {
     console.log('Connected!');
 });
 
-const userLogSchema = new Schema(
-  {
-    name: String,
-    time: String,
-    number: String
-  }
-);
+const userLogSchema = new Schema({
+  name: String,
+  time: String,
+  number: String
+});
 
+const reserveLogSchema = new Schema({
+  date: String,
+  number: {
+    a: [String],
+    b: [String],
+    c: [String],
+    d: [String],
+    e: [String],
+  },
+  name: {
+    a: [String],
+    b: [String],
+    c: [String],
+    d: [String],
+    e: [String]
+  }
+});
 
 app.get('/', async (req, res) => {
   var userLog = mongoose.model('userlogs', userLogSchema);
