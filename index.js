@@ -45,7 +45,11 @@ const reserveLogSchema = new Schema({
   }
 });
 
-app.get('/', async (req, res) => {
+app.get('/', (req, res) => {
+  res.send({api: 'ksa-seminar-reservation-kisok-api'});
+})
+
+app.get('/log/user/k', async (req, res) => {
   var userLog = mongoose.model('user_logs', userLogSchema);
   var userLogData = new userLog({
     name: '권순호',
@@ -62,7 +66,7 @@ app.get('/', async (req, res) => {
   }
 })
 
-app.post('/updateTodayData', async (req, res) => {
+app.put('/log/seminar', async (req, res) => {
   reserve_name = JSON.parse(req.body.name);
   reserve_number = JSON.parse(req.body.number);
   var date = new Date();
@@ -97,7 +101,7 @@ app.post('/updateTodayData', async (req, res) => {
     } else {
       const filter = { date: todayDate };
       const update = { number: reserve_number, name: reserve_name };
-      reserveLog.findOneAndUpdate(filter, {$set: update}).exec();
+      reserveLog.findOneAndUpdate(filter, update).exec();
     }
     res.send({'result': 'SUCCESS'});
   } catch(e) {
