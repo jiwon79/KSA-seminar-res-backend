@@ -66,6 +66,46 @@ app.get('/log/user/k', async (req, res) => {
   }
 })
 
+app.get('/log/seminar', async (req, res) => {
+  var date = new Date();
+  var todayDate = date.toISOString().slice(0,10);
+
+  var reserveLog = mongoose.model('reserve_logs', reserveLogSchema);
+  try {
+    let count = await reserveLog.count({ date: todayDate });
+    console.log(count);
+    if (count == 0) {
+      let data_name = Array(15).fill('-');
+      let data_number = Array(15).fill('00-000');
+
+      var reserveLog = mongoose.model('reserve_logs', reserveLogSchema);
+      var reserveLogData = new reserveLog({
+        date: todayDate,
+        name: {
+          a: data_name,
+          b: data_name,
+          c: data_name,
+          d: data_name,
+          e: data_name
+        },
+        number: {
+          a: data_number,
+          b: data_number,
+          c: data_number,
+          d: data_number,
+          e: data_number,
+        }
+      });
+      reserveLogData.save();
+    }
+    var todayReserveData = await reserveLog.findOne({ date: todayDate });
+    res.send({ result: 'SUCCESS', data: todayReserveData });
+  } catch(e) {
+    console.log(e);
+    res.send({result: 'FAIL'});
+  }
+})
+
 app.put('/log/seminar', async (req, res) => {
   reserve_name = JSON.parse(req.body.name);
   reserve_number = JSON.parse(req.body.number);
@@ -90,11 +130,9 @@ app.put('/log/seminar', async (req, res) => {
       e: reserve_number.e
     }
   });
-  console.log(reserveLogData);
 
   try {
     var count = await reserveLog.count({ 'date': todayDate });
-    console.log(count);
 
     if (count == 0) {
       await reserveLogData.save();
@@ -126,10 +164,6 @@ app.get('/userLog', (req, res) => {
   })
   // res.json({name: 'naemanaem'});
 })
-
-// a,b,c,d,e 정보 주면 reserve_log table에 넣기
-// 오늘 날짜가 있으면 업데이ㅌ, 없으면 새로 생성
-
 
 app.get('/auth', (req, res) => {
   res.send(req.query.id+','+req.query.pw)
