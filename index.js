@@ -1,12 +1,15 @@
 const express = require('express');
-const { createServer } = require('http');
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const app = express()
 const cors = require('cors');
+var bodyParser = require('body-parser');
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+
 const port = process.env.PORT || 3000;
 
 mongoose.connect(process.env.KSA_SEMINAR_KIOSK_DB);
@@ -18,13 +21,14 @@ db.once('open', function() {
     console.log('Connected!');
 });
 
-var userLogSchema = new Schema(
+const userLogSchema = new Schema(
   {
     name: String,
     time: String,
     number: String
   }
-)
+);
+
 
 app.get('/', async (req, res) => {
   var userLog = mongoose.model('userlogs', userLogSchema);
@@ -35,7 +39,7 @@ app.get('/', async (req, res) => {
   });
 
   try {
-    let response = await userLogData.save();
+    await userLogData.save();
     res.send({'result': 'SUCCESS'});
   } catch(e) {
     console.log(e);
@@ -43,12 +47,12 @@ app.get('/', async (req, res) => {
   }
 })
 
-app.get('/updateTodayData', (req, res) => {
+app.post('/updateTodayData', (req, res) => {
   console.log(req.body);
-  // let number = req.body.number;
-  // let name = req.body.name;
-  
+  // const number = JSON.parse(req.body).number;
+  // const name = JSON.parse(req.body).name;
   // console.log(number, name);
+  res.send({'result': 'SUCCESS'});
 })
 
 
