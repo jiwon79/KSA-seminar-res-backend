@@ -68,7 +68,8 @@ app.get('/log/user/k', async (req, res) => {
 
 app.get('/log/seminar', async (req, res) => {
   var date = new Date();
-  var todayDate = date.toISOString().slice(0,10);
+  var todayDate = date.toLocaleDateString();
+  console.log(todayDate);
 
   var reserveLog = mongoose.model('reserve_logs', reserveLogSchema);
   try {
@@ -97,9 +98,11 @@ app.get('/log/seminar', async (req, res) => {
         }
       });
       reserveLogData.save();
+      res.send({ result: 'SUCCESS', data: reserveLogData });
+    } else {
+      var todayReserveData = await reserveLog.findOne({ date: todayDate });
+      res.send({ result: 'SUCCESS', data: todayReserveData });
     }
-    var todayReserveData = await reserveLog.findOne({ date: todayDate });
-    res.send({ result: 'SUCCESS', data: todayReserveData });
   } catch(e) {
     console.log(e);
     res.send({result: 'FAIL'});
@@ -110,7 +113,7 @@ app.put('/log/seminar', async (req, res) => {
   reserve_name = JSON.parse(req.body.name);
   reserve_number = JSON.parse(req.body.number);
   var date = new Date();
-  var todayDate = date.toISOString().slice(0,10);
+  var todayDate = date.toLocaleDateString();
 
   var reserveLog = mongoose.model('reserve_logs', reserveLogSchema);
   var reserveLogData = new reserveLog({
