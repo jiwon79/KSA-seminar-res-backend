@@ -10,6 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
+const utils = require('./utils');
 const port = process.env.PORT || 3000;
 
 mongoose.connect(process.env.KSA_SEMINAR_KIOSK_DB);
@@ -50,8 +51,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/log/seminar', async (req, res) => {
-  var date = new Date();
-  var todayDate = date.toLocaleDateString();
+  var todayDate = utils.getTodayDate();
   console.log(todayDate);
   console.log('get log/seminar');
 
@@ -96,8 +96,8 @@ app.put('/log/seminar', async (req, res) => {
   console.log('put log/seminar');
   reserve_name = JSON.parse(req.body.name);
   reserve_number = JSON.parse(req.body.number);
-  var date = new Date();
-  var todayDate = date.toLocaleDateString();
+  
+  var todayDate = utils.getTodayDate();
   console.log(todayDate);
 
   var reserveLog = mongoose.model('reserve_logs', reserveLogSchema);
