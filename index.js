@@ -23,9 +23,16 @@ db.once('open', function() {
 });
 
 const userLogSchema = new Schema({
-  name: String,
-  time: String,
-  number: String
+  option: String,
+  user: {
+    name: String,
+    number: String,
+    tel: String
+  },
+  reserve: {
+    room: String,
+    time: String
+  }
 });
 
 const reserveLogSchema = new Schema({
@@ -101,21 +108,9 @@ app.put('/log/seminar', async (req, res) => {
 
   var reserveLog = mongoose.model('reserve_logs', reserveLogSchema);
   var reserveLogData = new reserveLog({
-    date: todayDate,
-    name: {
-      a: reserve_name.a,
-      b: reserve_name.b,
-      c: reserve_name.c,
-      d: reserve_name.d,
-      e: reserve_name.e
-    },
-    number: {
-      a: reserve_number.a,
-      b: reserve_number.b,
-      c: reserve_number.c,
-      d: reserve_number.d,
-      e: reserve_number.e
-    }
+    date: todayDate, 
+    name: reserve_name, 
+    number: reserve_number
   });
 
   try {
