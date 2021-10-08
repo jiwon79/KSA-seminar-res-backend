@@ -51,8 +51,8 @@ app.get('/', (req, res) => {
 })
 
 app.get('/log/seminar', async (req, res) => {
-  var todayDate = utils.getTodayDate();
-  console.log(todayDate);
+  var date = new Date();
+  var todayDate = date.format('yyyy-MM-dd(ES)')
   console.log('get log/seminar');
 
   var reserveLog = mongoose.model('reserve_logs', reserveLogSchema);
@@ -96,9 +96,8 @@ app.put('/log/seminar', async (req, res) => {
   console.log('put log/seminar');
   reserve_name = JSON.parse(req.body.name);
   reserve_number = JSON.parse(req.body.number);
-  
-  var todayDate = utils.getTodayDate();
-  console.log(todayDate);
+  var date = new Date();
+  var todayDate = date.format('yyyy-MM-dd(ES)');
 
   var reserveLog = mongoose.model('reserve_logs', reserveLogSchema);
   var reserveLogData = new reserveLog({
