@@ -32,7 +32,8 @@ const userLogSchema = new Schema({
   reserve: {
     room: String,
     time: String
-  }
+  },
+  time: String
 });
 
 const reserveLogSchema = new Schema({
@@ -129,6 +130,33 @@ app.put('/log/seminar', async (req, res) => {
     res.send({'result': 'FAIL'});
   }
 })
+
+app.post('/log/user', async (req, res) => {
+  console.log('/log/user');
+
+  var date = new Date();
+  var userLog = mongoose.model('user_logs', userLogSchema);
+  var userLogData = new userLog({
+    option: req.body.option,
+    user: {
+      name: req.body.name,
+      number: req.body.number,
+      tel: req.body.tel
+    },
+    reserve: {
+      room: req.body.room,
+      time: req.body.time
+    },
+    time: date.format('yyyy-MM-dd HH-mm-ss')
+  })
+  try {
+    await userLogData.save();
+    res.send({ result: 'SUCCESS' });
+  } catch(e) {
+    res.send({ result: 'FAIL' });
+  }
+})
+
 
 app.get('/userLog', (req, res) => {
   var datas = mongoose.model('userLog', userLogSchema, 'user_log');
