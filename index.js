@@ -49,32 +49,14 @@ app.get('/', (req, res) => {
   res.send({api: 'ksa-seminar-reservation-kisok-api'});
 })
 
-app.get('/log/user/k', async (req, res) => {
-  var userLog = mongoose.model('user_logs', userLogSchema);
-  var userLogData = new userLog({
-    name: '권순호',
-    time: '2021020',
-    number: '19-001'
-  });
-
-  try {
-    await userLogData.save();
-    res.send({'result': 'SUCCESS'});
-  } catch(e) {
-    console.log(e);
-    res.send({'result': 'FAIL'});
-  }
-})
-
 app.get('/log/seminar', async (req, res) => {
   var date = new Date();
   var todayDate = date.toLocaleDateString();
-  console.log(todayDate);
+  console.log('get log/seminar');
 
   var reserveLog = mongoose.model('reserve_logs', reserveLogSchema);
   try {
     let count = await reserveLog.count({ date: todayDate });
-    console.log(count);
     if (count == 0) {
       let data_name = Array(15).fill('-');
       let data_number = Array(15).fill('00-000');
@@ -110,6 +92,7 @@ app.get('/log/seminar', async (req, res) => {
 })
 
 app.put('/log/seminar', async (req, res) => {
+  console.log('put log/seminar');
   reserve_name = JSON.parse(req.body.name);
   reserve_number = JSON.parse(req.body.number);
   var date = new Date();
