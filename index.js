@@ -52,6 +52,7 @@ app.get('/', (req, res) => {
 app.get('/log/seminar', async (req, res) => {
   var date = new Date();
   var todayDate = date.toLocaleDateString();
+  console.log(todayDate);
   console.log('get log/seminar');
 
   var reserveLog = mongoose.model('reserve_logs', reserveLogSchema);
@@ -97,6 +98,7 @@ app.put('/log/seminar', async (req, res) => {
   reserve_number = JSON.parse(req.body.number);
   var date = new Date();
   var todayDate = date.toLocaleDateString();
+  console.log(todayDate);
 
   var reserveLog = mongoose.model('reserve_logs', reserveLogSchema);
   var reserveLogData = new reserveLog({
