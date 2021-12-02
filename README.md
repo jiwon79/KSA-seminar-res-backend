@@ -6,6 +6,7 @@
 - ~~get today seminar reserve data~~
 - push user reservatoin data
 - get user reservatoni data(admin page)
+- student number google spreedSheet
 
 ### code
 - express route

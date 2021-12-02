@@ -159,7 +159,7 @@ app.post('/log/user', async (req, res) => {
 
 
 app.get('/userLog', (req, res) => {
-  var datas = mongoose.model('userLog', userLogSchema, 'user_log');
+  var datas = mongoose.model('userLog', userLogSchema, 'user_logs');
   var rowData = [];
   datas.find(function(error, userLog) {
     if(error) {
