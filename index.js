@@ -108,7 +108,11 @@ app.put('/log/seminar', async (req, res) => {
   console.log('put log/seminar');
   reserve_name = JSON.parse(req.body.name);
   reserve_number = JSON.parse(req.body.number);
-  var date = new Date();
+  
+  const now = new Date();
+  const utcNow = now.getTime() + (now.getTimezoneOffset() * 60 * 1000);
+  const koreaTimeDiff = 9 * 60 * 60 * 1000;
+  const date = new Date(utcNow + koreaTimeDiff);
   var todayDate = date.format('yyyy-MM-dd(ES)');
 
   var reserveLog = mongoose.model('reserve_logs', reserveLogSchema);
