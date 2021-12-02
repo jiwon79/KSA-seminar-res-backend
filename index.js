@@ -189,10 +189,7 @@ app.get('/userLog', (req, res) => {
 
 app.post('/log/userLog', (req, res) => {
   var datas = mongoose.model('userLog', userLogSchema, 'user_logs');
-  console.log(req.body.logDate)
   var logDate = new Date(req.body.logDate).format('yyyy-MM-dd');
-  console.log(logDate);
-  console.log(typeof(logDate));
 
   var rowData = [];
   datas.find(function(error, userLog) {
@@ -202,6 +199,26 @@ app.post('/log/userLog', (req, res) => {
       userLog.forEach(function(row) {
         console.log(row.time);
         if (row.time.includes(logDate)) {
+          rowData.push(row);
+        }
+      })
+    }
+    res.json(rowData);
+  })
+})
+
+app.post('/log/dayLog', (req, res) => {
+  var reserveLog = mongoose.model('reserve_logs', reserveLogSchema);
+  var logDate = new Date(req.body.logDate).format('yyyy-MM-dd');
+  console.log(logDate);
+
+  var rowData = [];
+  reserveLog.find(function(error, userLog) {
+    if(error) {
+      console.log("error : ", error)
+    } else {
+      userLog.forEach(function(row) {
+        if (row.date.includes(logDate)) {
           rowData.push(row);
         }
       })
