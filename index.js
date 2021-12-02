@@ -59,7 +59,11 @@ app.get('/', (req, res) => {
 })
 
 app.get('/log/seminar', async (req, res) => {
-  var date = new Date();
+  const now = new Date();
+  const utcNow = now.getTime() + (now.getTimezoneOffset() * 60 * 1000);
+  const koreaTimeDiff = 9 * 60 * 60 * 1000;
+  const date = new Date(utcNow + koreaTimeDiff);
+
   var todayDate = date.format('yyyy-MM-dd(ES)')
   console.log('get log/seminar');
 
@@ -133,8 +137,12 @@ app.put('/log/seminar', async (req, res) => {
 
 app.post('/log/user', async (req, res) => {
   console.log('/log/user');
+  
+  const now = new Date();
+  const utcNow = now.getTime() + (now.getTimezoneOffset() * 60 * 1000);
+  const koreaTimeDiff = 9 * 60 * 60 * 1000;
+  const date = new Date(utcNow + koreaTimeDiff);
 
-  var date = new Date();
   var userLog = mongoose.model('user_logs', userLogSchema);
   var userLogData = new userLog({
     option: req.body.option,
