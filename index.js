@@ -63,7 +63,7 @@ app.get('/log/seminar', async (req, res) => {
   const utcNow = now.getTime() + (now.getTimezoneOffset() * 60 * 1000);
   const koreaTimeDiff = 9 * 60 * 60 * 1000;
   const date = new Date(utcNow + koreaTimeDiff);
-
+  
   var todayDate = date.format('yyyy-MM-dd(ES)')
   console.log('get log/seminar');
 
@@ -182,6 +182,30 @@ app.get('/userLog', (req, res) => {
   })
   // res.json({name: 'naemanaem'});
 })
+
+app.post('/log/userLog', (req, res) => {
+  var datas = mongoose.model('userLog', userLogSchema, 'user_logs');
+  console.log(req.body.logDate)
+  var logDate = new Date(req.body.logDate).format('yyyy-MM-dd');
+  console.log(logDate);
+  console.log(typeof(logDate));
+
+  var rowData = [];
+  datas.find(function(error, userLog) {
+    if(error) {
+      console.log("error : ", error)
+    } else {
+      userLog.forEach(function(row) {
+        console.log(row.time);
+        if (row.time.includes(logDate)) {
+          rowData.push(row);
+        }
+      })
+    }
+    res.json(rowData);
+  })
+})
+
 
 app.get('/auth', (req, res) => {
   res.send(req.query.id+','+req.query.pw)
